@@ -42,8 +42,9 @@ module ExceptionNotifier
       fields.push({ title: 'Hostname', value: Socket.gethostname })
 
       if exception.backtrace
-        formatted_backtrace = @backtrace_lines ? "```#{exception.backtrace.first(@backtrace_lines).join("\n")}```" : "```#{exception.backtrace.join("\n")}```"
-        fields.push({ title: 'Backtrace', value: formatted_backtrace })
+        backtrace = clean_backtrace(exception)
+        backtrace_lines = @backtrace_lines ? backtrace.first(@backtrace_lines) : backtrace
+        fields.push({ title: 'Backtrace', value: "```#{backtrace_lines.join("\n")}```" })
       end
 
       unless data.empty?
